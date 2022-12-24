@@ -1,35 +1,124 @@
-import 'dart:math';
+// ignore_for_file: avoid_print
+import 'dart:io';
+import 'package:hello_flutter2/game.dart';
 
-enum GuessResult { correct, tooHigh, tooLow }
+import 'game.dart';
 
-class Game {
-  //ชื่อคลาสไม่จำเป็นต้องเป็นชื่อเดียวกันกับไฟล์
-  final int answer;
-  //final String play;
+List<int> myList = [];
+var len = myList.length;
+var PlayAgian = false;
 
-  int _totalGuesses = 0;
+void main() {
+  var game = Game();
+  late GuessResult guessResult;
 
-  Game({int maxRandom = 100}) : answer = Random().nextInt(maxRandom) + 1 {
-    print('Enter a maximum number to random:  $answer');
-  }
 
-  GuessResult doGuess(int guess) {
-    _totalGuesses++;
-    if (guess == answer) {
-      return GuessResult.correct;
-    } else if (guess > answer) {
-      return GuessResult.tooHigh;
-    } else {
-      return GuessResult.tooLow;
+  print('╔══════════════════════════════════════════════════');
+  print('║              GUESS THE NUMBER                    ');
+  print('║──────────────────────────────────────────────────');
+  do {
+    stdout.write('║  Guess the number between 1 and 100 : ');
+
+    var input = stdin.readLineSync();
+
+    if (input == null) {
+      return;
     }
-  }
 
-  // getter method
-  int getTotalGuesses() {
-    return _totalGuesses;
-  }
+    var guess = int.tryParse(input);
 
-  int get totalGuesses {
-    return _totalGuesses;
-  }
+    if (guess == null) {
+      continue;
+    }
+
+    guessResult = game.doGuess(guess);
+    if (guessResult == GuessResult.correct) {
+      print('║  ➜ $guess is CORRECT ❤, total guesses: ${game.totalGuesses}');
+      print('║──────────────────────────────────────────────────');
+      print('║                    THE END                       ');
+      print('╚══════════════════════════════════════════════════');
+      myList.add(game.totalGuesses);
+      do {
+        stdout.write('Play again? (Y/N): ');
+        var choie = stdin.readLineSync();
+        if (choie == 'Y' || choie == 'y') {
+          PlayAgian = letsplay(choie);
+        } else if (choie == 'N' || choie == 'n') {
+          print('You are Played $len games');
+          for (var i = 1; i <= myList.length; i++) {
+            var count = myList[i-1];
+            print('🚀 Game #$i: $count guesses');
+          }
+          exit(0);
+        } else {
+          continue;
+        }
+      } while (!PlayAgian);
+    }
+
+    if (guessResult == GuessResult.tooHigh) {
+      print('║  ➜ $guess is TOO HIGH! ▲');
+      print('║──────────────────────────────────────────────────');
+    } else {
+      print('║  ➜ $guess is TOO LOW! ▼');
+      print('║──────────────────────────────────────────────────');
+    }
+  } while (guessResult != GuessResult.correct);
+}
+letsplay(var choie){
+  var game = Game();
+  late GuessResult guessResult;
+
+
+  print('╔══════════════════════════════════════════════════');
+  print('║              GUESS THE NUMBER                    ');
+  print('║──────────────────────────────────────────────────');
+  do {
+    stdout.write('║  Guess the number between 1 and 100 : ');
+
+    var input = stdin.readLineSync();
+
+    if (input == null) {
+      return;
+    }
+
+    var guess = int.tryParse(input);
+
+    if (guess == null) {
+      continue;
+    }
+
+    guessResult = game.doGuess(guess);
+    if (guessResult == GuessResult.correct) {
+      print('║  ➜ $guess is CORRECT ❤, total guesses: ${game.totalGuesses}');
+      print('║──────────────────────────────────────────────────');
+      print('║                    THE END                       ');
+      print('╚══════════════════════════════════════════════════');
+      myList.add(game.totalGuesses);
+      do {
+        stdout.write('Play again? (Y/N): ');
+        var choie = stdin.readLineSync();
+        if (choie == 'Y' || choie == 'y') {
+          PlayAgian=letsplay(choie);
+        } else if (choie == 'N' || choie == 'n') {
+          print('You are Played $len games');
+          for (var i = 1; i <= myList.length; i++) {
+            var count = myList[i-1];
+            print('🚀 Game #$i: $count guesses');
+          }
+          exit(0);
+        } else {
+          continue;
+        }
+      } while (!PlayAgian);
+    }
+
+    if (guessResult == GuessResult.tooHigh) {
+      print('║  ➜ $guess is TOO HIGH! ▲');
+      print('║──────────────────────────────────────────────────');
+    } else {
+      print('║  ➜ $guess is TOO LOW! ▼');
+      print('║──────────────────────────────────────────────────');
+    }
+  } while (guessResult != GuessResult.correct);
 }

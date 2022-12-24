@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 import 'dart:math';
 
+// enumeration
 enum GuessResult { correct, tooHigh, tooLow }
 
 class Game {
